@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { Layers } from "lucide-react";
 
 // Fix Leaflet's default icon path issues in Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -37,17 +38,46 @@ interface ResponsiveMapProps {
 }
 
 export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveMapProps) {
+  const [mapType, setMapType] = useState<'normal' | 'satellite'>('normal');
+
   return (
-    <MapContainer
-      center={[11.1271, 78.6569]}
-      zoom={7}
-      className={className || "w-full h-full"}
-      zoomControl={false}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <div className={`relative ${className || "w-full h-full"}`}>
+      {/* Premium Floating Map Toggle */}
+      <div className="absolute top-4 right-4 z-[1000] bg-black/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-1">
+        <div className="pl-3 pr-2 flex items-center text-gray-400">
+          <Layers className="w-4 h-4" />
+        </div>
+        <button
+          onClick={() => setMapType('normal')}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${mapType === 'normal' ? 'bg-white text-black shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
+        >
+          Street
+        </button>
+        <button
+          onClick={() => setMapType('satellite')}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${mapType === 'satellite' ? 'bg-white text-black shadow-md' : 'text-gray-300 hover:text-white hover:bg-white/10'}`}
+        >
+          Satellite
+        </button>
+      </div>
+
+      <MapContainer
+        center={[11.1271, 78.6569]}
+        zoom={7}
+        className="w-full h-full"
+        zoomControl={false}
+      >
+        {mapType === 'normal' ? (
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        ) : (
+          <TileLayer
+            attribution='&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        )}
       {markers.map(m => (
         m.lat && m.lng ? (
           <Marker
@@ -88,5 +118,6 @@ export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveM
         ) : null
       ))}
     </MapContainer>
+    </div>
   );
 }

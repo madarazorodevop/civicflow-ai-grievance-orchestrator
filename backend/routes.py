@@ -6,6 +6,7 @@ import schemas, crud, auth, models
 import shutil
 import os
 import uuid
+import requests
 
 router = APIRouter()
 
@@ -21,6 +22,8 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     user = crud.get_user_by_email(db, form_data.username)
     if not user or not auth.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
+    if user.is_banned == 1:
+        raise HTTPException(status_code=403, detail="Account banned for spamming complaints.")
     access_token = auth.create_access_token(data={"sub": user.email})
     return {"access_token": access_token, "token_type": "bearer", "role": user.role}
 
@@ -37,7 +40,18 @@ def upload_file(file: UploadFile = File(...)):
 def create_complaint(complaint: schemas.ComplaintCreate, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
     if current_user.role != "client":
         raise HTTPException(status_code=403, detail="Only clients can create complaints")
+    
+    if len(current_user.complaints) >= 10:
+        current_user.is_banned = 1
+        db.commit()
+        raise HTTPException(status_code=403, detail="Account banned for submitting too many complaints.")
+        
     return crud.create_complaint(db, complaint, current_user.id)
+
+@router.get("/banned_users/")
+def get_banned_users(db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
+    banned = db.query(models.User).filter(models.User.is_banned == 1).all()
+    return [{"id": u.id, "email": u.email, "complaints_count": len(u.complaints)} for u in banned]
 
 @router.get("/complaints/", response_model=list[schemas.Complaint])
 def read_complaints(db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
@@ -71,3 +85,25 @@ def read_complaint(complaint_id: str, db: Session = Depends(get_db), current_use
 @router.get("/users/me", response_model=schemas.User)
 def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
     return current_user
+
+@router.post("/chat/")
+def chat_with_ai(request: schemas.ChatRequest, current_user: models.User = Depends(auth.get_current_user)):
+    groq_api_key = os.getenv("GROQ_API_KEY", "")
+    headers = {
+        "Authorization": f"Bearer {groq_api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": "openai/gpt-oss-20b",
+        "messages": [{"role": m.role, "content": m.content} for m in request.messages],
+        "temperature": 0.7,
+        "max_tokens": 1024
+    }
+    try:
+        response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]
+    except Exception as e:
+        print(f"Groq API Error: {e}")
+        raise HTTPException(status_code=500, detail="AI Service is currently unavailable")

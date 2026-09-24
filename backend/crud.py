@@ -18,7 +18,7 @@ def create_complaint(db: Session, complaint: schemas.ComplaintCreate, user_id: i
     c_id = f"CF-{str(uuid.uuid4())[:8].upper()}"
     
     ai = ai_provider.get_ai_provider()
-    triage = ai.triage_complaint(complaint.title + " " + complaint.description)
+    triage = ai.triage_complaint(f"[{complaint.category}] {complaint.title} {complaint.description}")
     risk = triage.get("risk_level", "LOW")
     
     eta = "7 days"

@@ -66,3 +66,10 @@ class Token(BaseModel):
     access_token: str
     token_type: str
     role: str
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[ChatMessage]

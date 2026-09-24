@@ -21,6 +21,7 @@ export const dict: Record<string, Record<string, string>> = {
     priority_queue: "Priority Queue",
     ai: "AI Orchestrator",
     analytics: "Analytics",
+    ai_chat: "AI Assistant",
   },
   ta: {
     dashboard: "முகப்பு",
@@ -44,5 +45,6 @@ export const dict: Record<string, Record<string, string>> = {
     priority_queue: "முன்னுரிமை வரிசை",
     ai: "செயற்கை நுண்ணறிவு",
     analytics: "பகுப்பாய்வு",
+    ai_chat: "ஏஐ உதவியாளர்",
   }
 };

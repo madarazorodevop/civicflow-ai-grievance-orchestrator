@@ -19,11 +19,15 @@ function LocationMarker({ position, setPosition }: { position: any, setPosition:
   });
 
   const map = useMap();
+  
+  const lat = position?.lat;
+  const lng = position?.lng;
+
   useEffect(() => {
-    if (position) {
-      map.flyTo(position, 15);
+    if (lat && lng) {
+      map.flyTo([lat, lng], 15, { animate: true, duration: 1.5 });
     }
-  }, [position, map]);
+  }, [lat, lng, map]);
 
   return position === null ? null : (
     <Marker position={position}></Marker>

@@ -61,7 +61,7 @@ export default function AdminComplaintDetail() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{c.id}: {c.title}</h1>
             <div className="flex items-center gap-3 text-sm mb-3">
               <span className="text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded">{c.category}</span>
-              <span className={`px-2 py-0.5 rounded font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-100 text-red-700' : c.riskLevel === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+              <span className={`px-2 py-0.5 rounded font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-600 text-white' : c.riskLevel === 'MEDIUM' ? 'bg-orange-500 text-white' : 'bg-blue-600 text-white'}`}>
                 {c.riskLevel} RISK
               </span>
               <span className={`px-2 py-0.5 rounded font-bold ${c.approvalStatus === 'APPROVED' ? 'bg-green-100 text-green-700' : c.approvalStatus === 'REJECTED' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>

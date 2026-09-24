@@ -13,7 +13,7 @@ export default function ClientNotifications() {
   const notifications = complaints.map(c => ({
     id: c.id,
     title: `Status update on: ${c.title}`,
-    message: `Your complaint is currently ${c.status}. ETA: ${c.eta}`,
+    message: `Your complaint is currently ${c.status}. ${c.status === 'RESOLVED' ? 'Completed' : `ETA: ${c.eta}`}`,
     date: new Date(c.created_at).toLocaleDateString(),
     isResolved: c.status === 'Resolved'
   }));

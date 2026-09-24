@@ -63,7 +63,7 @@ export default function AdminDashboard() {
               <div key={c.id} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-700 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <div className="flex justify-between items-start mb-1">
                   <strong className="dark:text-white">{c.id}</strong>
-                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-200 text-red-800' : 'bg-orange-200 text-orange-800'}`}>{c.riskLevel}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-600 text-white' : 'bg-orange-500 text-white'}`}>{c.riskLevel}</span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 truncate mb-2">{c.title}</p>
                 <Link href={`/admin/complaints/${c.id}`} className="text-blue-600 hover:underline text-xs font-bold">Manage &rarr;</Link>
@@ -95,7 +95,7 @@ export default function AdminDashboard() {
                       <div className="text-gray-500 text-xs mt-0.5">{c.category}</div>
                     </td>
                     <td className="py-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-100 text-red-700' : c.riskLevel === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-600 text-white' : c.riskLevel === 'MEDIUM' ? 'bg-orange-500 text-white' : 'bg-blue-600 text-white'}`}>
                         {c.riskLevel}
                       </span>
                     </td>

@@ -4,7 +4,7 @@ import api from '@/lib/api';
 import { useLangStore } from '@/lib/store';
 import { dict } from '@/lib/i18n';
 import Link from 'next/link';
-import { FileText, Map as MapIcon, Activity } from 'lucide-react';
+import { FileText, Map as MapIcon, Activity, MessageSquare } from 'lucide-react';
 
 export default function ClientDashboard() {
   const [complaints, setComplaints] = useState<any[]>([]);
@@ -39,9 +39,16 @@ export default function ClientDashboard() {
             <p className="text-blue-100 text-sm mt-1 font-light">Submit a new civic issue for immediate AI triage.</p>
           </div>
         </Link>
-        <Link href="/client/map" className="flex items-center gap-4 p-6 bg-white/10 backdrop-blur-lg border border-white/20 text-white rounded-2xl shadow-xl hover:bg-white/20 transition-all group">
-          <div className="shrink-0 p-4 bg-blue-400/20 text-blue-300 rounded-xl group-hover:scale-110 transition-transform"><MapIcon className="w-8 h-8" /></div>
+        <Link href="/client/ai-chat" className="flex items-center gap-4 p-6 bg-indigo-600/80 backdrop-blur-lg border border-indigo-400/30 text-white rounded-2xl shadow-xl hover:bg-indigo-600 transition-colors group">
+          <div className="shrink-0 p-4 bg-white/20 rounded-xl group-hover:scale-110 transition-transform"><MessageSquare className="w-8 h-8" /></div>
           <div>
+            <h2 className="text-xl font-bold break-words">{d.ai_chat || 'AI Assistant'}</h2>
+            <p className="text-indigo-100 text-sm mt-1 font-light">Ask civic questions and get instant AI answers.</p>
+          </div>
+        </Link>
+        <Link href="/client/map" className="md:col-span-2 flex items-center justify-center gap-4 p-6 bg-white/10 backdrop-blur-lg border border-white/20 text-white rounded-2xl shadow-xl hover:bg-white/20 transition-all group">
+          <div className="shrink-0 p-4 bg-blue-400/20 text-blue-300 rounded-xl group-hover:scale-110 transition-transform"><MapIcon className="w-8 h-8" /></div>
+          <div className="text-center md:text-left">
             <h2 className="text-xl font-bold">{d.map || 'Community Map'}</h2>
             <p className="text-gray-300 text-sm mt-1 font-light">View active civic issues around your area.</p>
           </div>
@@ -66,7 +73,7 @@ export default function ClientDashboard() {
               </div>
               <div className="text-right flex flex-col items-end gap-2">
                 <span className="px-3 py-1 bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-bold rounded-full">{c.status}</span>
-                <span className="text-xs text-gray-300 font-medium">ETA: {c.eta}</span>
+                <span className={`text-xs font-medium ${c.status === 'RESOLVED' ? 'text-green-400' : 'text-gray-300'}`}>{c.status === 'RESOLVED' ? 'Completed' : `ETA: ${c.eta}`}</span>
               </div>
             </div>
           ))}

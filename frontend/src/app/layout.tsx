@@ -10,7 +10,7 @@ const notoSansTamil = Noto_Sans_Tamil({
 });
 
 export const metadata: Metadata = {
-  title: "CIVICFLOW v8.5",
+  title: "CIVICFLOW v0.9",
   description: "AI-powered civic grievance resolution platform",
 };
 

@@ -9,6 +9,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     role = Column(String, default="client")
+    is_banned = Column(Integer, default=0) # 0 for false, 1 for true
     complaints = relationship("Complaint", back_populates="user")
     notifications = relationship("Notification", back_populates="user")
 

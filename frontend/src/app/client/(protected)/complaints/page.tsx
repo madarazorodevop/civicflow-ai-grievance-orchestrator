@@ -41,7 +41,7 @@ export default function ClientComplaints() {
                   </div>
                 </div>
                 <div><div className="text-gray-400 mb-1 font-semibold">{d.status || 'Status'}</div><div className="font-extrabold text-green-400">{c.status}</div></div>
-                <div><div className="text-gray-400 mb-1 font-semibold">{d.eta || 'ETA'}</div><div className="font-bold text-blue-200">{c.eta}</div></div>
+                <div><div className="text-gray-400 mb-1 font-semibold">{d.eta || 'ETA'}</div><div className={`font-bold ${c.status === 'RESOLVED' ? 'text-green-400' : 'text-blue-200'}`}>{c.status === 'RESOLVED' ? 'Completed' : c.eta}</div></div>
                 <div><div className="text-gray-400 mb-1 font-semibold">Submitted On</div><div className="font-bold text-gray-300">{new Date(c.created_at).toLocaleDateString()}</div></div>
               </div>
             </div>

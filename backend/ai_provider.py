@@ -32,7 +32,9 @@ class DemoAIProvider(AIProvider):
         high_words = ["fire", "wire", "accident", "collapse", "danger", "emergency", "blood", "death", "trap", "fall", "hurt", "urgent", "immediate", "robbery", "gang", "assault", "gun", "knife", "violent", "violence", "kill", "contamination", "hazard", "poison", "toxic", "epidemic", "outbreak", "disease", "illness", "mass"]
         med_words = ["pothole", "street", "water", "garbage", "trash", "pipe", "leak", "broken", "damage", "block", "light", "road"]
         
-        if any(w in text for w in high_words):
+        if "[other]" in text:
+            return {"risk_level": "LOW", "reason": "User explicitly categorized as Other / Low Threat.", "priority": "LOW"}
+        elif any(w in text for w in high_words):
             return {"risk_level": "SEVERE", "reason": "Immediate hazard or life-safety issue detected in the description.", "priority": "SEVERE"}
         elif any(w in text for w in med_words):
             return {"risk_level": "MEDIUM", "reason": "Moderate infrastructure damage or public nuisance detected.", "priority": "MEDIUM"}

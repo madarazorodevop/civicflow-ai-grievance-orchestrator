@@ -28,18 +28,31 @@ export default function ReportPage() {
 
   const locateMe = () => {
     if (navigator.geolocation) {
-      toast.loading('Detecting location...', { id: 'geo' });
+      toast.loading('Detecting location (this relies on your device GPS accuracy)...', { id: 'geo' });
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLat(position.coords.latitude);
-          setLng(position.coords.longitude);
-          toast.success('Location locked successfully', { id: 'geo' });
+        async (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+          setLat(latitude);
+          setLng(longitude);
+          
+          try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+            const data = await res.json();
+            if (data && data.display_name) {
+              setAddressInput(data.display_name);
+            }
+          } catch (e) {
+            console.error('Reverse geocode failed', e);
+          }
+          
+          toast.success('Location locked! Drag the map if it needs adjusting.', { id: 'geo' });
         },
         (error) => {
           console.error(error);
           toast.error('Location access denied or unavailable. Please enable permissions.', { id: 'geo' });
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
       );
     } else {
       toast.error('Geolocation is not supported by your browser', { id: 'geo' });
@@ -118,6 +131,7 @@ export default function ReportPage() {
             <option className="bg-gray-800 text-red-400 font-bold" value="Armed Robbery">Armed Robbery</option>
             <option className="bg-gray-800 text-red-400 font-bold" value="Assault">Assault / Battery</option>
             <option className="bg-gray-800 text-red-400 font-bold" value="Mass Health Hazard">Mass Health Hazard</option>
+            <option className="bg-gray-800 text-gray-400 font-bold" value="Other">Other (Low Threat)</option>
           </select>
         </div>
         <div>
