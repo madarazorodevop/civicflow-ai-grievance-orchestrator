@@ -1,10 +1,10 @@
-# CIVICFLOW v0.9.1
+# CIVICFLOW v0.9.2
 **AI-Powered Civic Grievance Resolution Orchestrator**
 
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)]()
-[![Version](https://img.shields.io/badge/Version-0.9.1-blue.svg)]()
+[![Version](https://img.shields.io/badge/Version-0.9.2-blue.svg)]()
 
 CIVICFLOW is an AI-powered civic technology platform designed to streamline municipal complaint reporting, intelligent triage, and SLA enforcement.
 

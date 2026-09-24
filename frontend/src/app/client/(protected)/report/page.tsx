@@ -137,7 +137,20 @@ export default function ReportPage() {
         <div>
           <label className="block text-sm font-semibold mb-2 text-gray-200">{d.photo}</label>
           <div className="flex items-center gap-4">
-            <input type="file" accept="image/*" id="cam" capture="environment" className="hidden" onChange={e => setFile(e.target.files?.[0]||null)} />
+            <input type="file" accept=".webp,.jpg,.jpeg,.png,image/webp,image/jpeg,image/png" id="cam" capture="environment" className="hidden" onChange={e => {
+              const f = e.target.files?.[0];
+              if (f) {
+                if (!['image/jpeg', 'image/png', 'image/webp'].includes(f.type) && !/\.(webp|jpg|jpeg|png)$/i.test(f.name)) {
+                  toast.error('only image file is accepted eg webp jpg png jpeg');
+                  e.target.value = '';
+                  setFile(null);
+                  return;
+                }
+                setFile(f);
+              } else {
+                setFile(null);
+              }
+            }} />
             <label htmlFor="cam" className="flex items-center gap-2 px-5 py-4 bg-white/10 hover:bg-white/20 cursor-pointer rounded-xl font-bold text-white transition-colors border border-white/10 shadow-lg">
               <Camera className="w-5 h-5"/> Capture or Upload
             </label>

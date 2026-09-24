@@ -29,7 +29,9 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
 
 @router.post("/upload")
 def upload_file(file: UploadFile = File(...)):
-    ext = file.filename.split('.')[-1]
+    ext = file.filename.split('.')[-1].lower()
+    if ext not in ['webp', 'jpg', 'jpeg', 'png']:
+        raise HTTPException(status_code=400, detail="only image file is accepted eg webp jpg png jpeg")
     filename = f"{uuid.uuid4()}.{ext}"
     os.makedirs("uploads", exist_ok=True)
     with open(f"uploads/{filename}", "wb") as buffer:
