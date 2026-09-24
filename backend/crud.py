@@ -22,7 +22,7 @@ def create_complaint(db: Session, complaint: schemas.ComplaintCreate, user_id: i
     risk = triage.get("risk_level", "LOW")
     
     eta = "7 days"
-    if risk == "HIGH":
+    if risk == "SEVERE":
         eta = "24 hours"
     elif risk == "MEDIUM":
         eta = "3 days"
@@ -63,12 +63,34 @@ def update_complaint_status(db: Session, complaint_id: str, status: str):
         db.refresh(db_c)
     return db_c
 
+def approve_complaint(db: Session, complaint_id: str, action: str, reason: str = None):
+    db_c = db.query(models.Complaint).filter(models.Complaint.id == complaint_id).first()
+    if db_c:
+        if action == "APPROVE":
+            db_c.approvalStatus = "APPROVED"
+            db_c.status = "Approved"
+            msg = f"Your complaint {db_c.id} has been approved."
+        else:
+            db_c.approvalStatus = "REJECTED"
+            db_c.status = "Rejected"
+            db_c.approvalReason = reason
+            msg = f"Your complaint {db_c.id} has been rejected. Reason: {reason}"
+        
+        notif = models.Notification(user_id=db_c.user_id, message=msg)
+        db.add(notif)
+        db.commit()
+        db.refresh(db_c)
+    return db_c
+
+def get_notifications(db: Session, user_id: int):
+    return db.query(models.Notification).filter(models.Notification.user_id == user_id).order_by(models.Notification.created_at.desc()).all()
+
 def get_dashboard_stats(db: Session):
     complaints = db.query(models.Complaint).all()
     return {
         "total": len(complaints),
         "new": len([c for c in complaints if c.status == "Submitted"]),
-        "high_risk": len([c for c in complaints if c.riskLevel == "HIGH"]),
+        "severe_risk": len([c for c in complaints if c.riskLevel == "SEVERE"]),
         "medium_risk": len([c for c in complaints if c.riskLevel == "MEDIUM"]),
         "low_risk": len([c for c in complaints if c.riskLevel == "LOW"]),
         "in_progress": len([c for c in complaints if c.status in ["Under Review", "Assigned", "In Progress"]]),

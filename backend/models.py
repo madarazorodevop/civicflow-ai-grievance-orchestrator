@@ -10,6 +10,15 @@ class User(Base):
     hashed_password = Column(String)
     role = Column(String, default="client")
     complaints = relationship("Complaint", back_populates="user")
+    notifications = relationship("Notification", back_populates="user")
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    message = Column(String)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    user = relationship("User", back_populates="notifications")
 
 class Complaint(Base):
     __tablename__ = "complaints"
@@ -30,5 +39,7 @@ class Complaint(Base):
     eta = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     resolved_at = Column(DateTime, nullable=True)
+    approvalStatus = Column(String, default="PENDING REVIEW")
+    approvalReason = Column(String, nullable=True)
     
     user = relationship("User", back_populates="complaints")

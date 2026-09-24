@@ -2,6 +2,14 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
+class Notification(BaseModel):
+    id: int
+    user_id: int
+    message: str
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
 class UserBase(BaseModel):
     email: str
     role: str = "client"
@@ -41,12 +49,18 @@ class Complaint(BaseModel):
     eta: Optional[str]
     created_at: datetime
     resolved_at: Optional[datetime]
+    approvalStatus: str
+    approvalReason: Optional[str] = None
 
     class Config:
         from_attributes = True
 
 class ComplaintUpdate(BaseModel):
     status: str
+
+class ComplaintApproval(BaseModel):
+    action: str
+    reason: Optional[str] = None
 
 class Token(BaseModel):
     access_token: str

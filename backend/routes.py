@@ -47,6 +47,14 @@ def read_complaints(db: Session = Depends(get_db), current_user: models.User = D
 def update_status(complaint_id: str, update: schemas.ComplaintUpdate, db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
     return crud.update_complaint_status(db, complaint_id, update.status)
 
+@router.post("/complaints/{complaint_id}/approve", response_model=schemas.Complaint)
+def approve_complaint(complaint_id: str, approval: schemas.ComplaintApproval, db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
+    return crud.approve_complaint(db, complaint_id, approval.action, approval.reason)
+
+@router.get("/notifications/", response_model=list[schemas.Notification])
+def get_notifications(db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    return crud.get_notifications(db, current_user.id)
+
 @router.get("/stats/")
 def get_stats(db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
     return crud.get_dashboard_stats(db)

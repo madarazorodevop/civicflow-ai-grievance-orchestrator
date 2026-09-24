@@ -17,7 +17,7 @@ class OpenAIProvider(AIProvider):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are an AI Triage assistant. Analyze the complaint and return a strict JSON object with exact keys: 'risk_level' (HIGH, MEDIUM, or LOW), 'reason' (short string), 'priority' (string). HIGH risk gets 'HIGH' priority, MEDIUM gets 'MEDIUM', LOW gets 'LOW'."},
+                    {"role": "system", "content": "You are an AI Triage assistant. Analyze the complaint and return a strict JSON object with exact keys: 'risk_level' (SEVERE, MEDIUM, or LOW), 'reason' (short string), 'priority' (string). SEVERE risk gets 'SEVERE' priority, MEDIUM gets 'MEDIUM', LOW gets 'LOW'."},
                     {"role": "user", "content": text}
                 ]
             )
@@ -33,7 +33,7 @@ class DemoAIProvider(AIProvider):
         med_words = ["pothole", "street", "water", "garbage", "trash", "pipe", "leak", "broken", "damage", "block", "light", "road"]
         
         if any(w in text for w in high_words):
-            return {"risk_level": "HIGH", "reason": "Immediate hazard or life-safety issue detected in the description.", "priority": "HIGH"}
+            return {"risk_level": "SEVERE", "reason": "Immediate hazard or life-safety issue detected in the description.", "priority": "SEVERE"}
         elif any(w in text for w in med_words):
             return {"risk_level": "MEDIUM", "reason": "Moderate infrastructure damage or public nuisance detected.", "priority": "MEDIUM"}
         else:

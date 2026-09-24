@@ -48,7 +48,7 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <Link href="/login" className="relative group">
+          <Link href="/client/login" className="relative group">
             <div className="absolute inset-0 bg-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-50 transition-opacity duration-300"></div>
             <div className="relative flex flex-col items-center p-8 bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all text-left overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>

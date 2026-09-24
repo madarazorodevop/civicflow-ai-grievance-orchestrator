@@ -35,19 +35,43 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Full Background Image Always Visible */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center z-0 scale-105"
+        style={{ backgroundImage: "url('/dashboard_banner.jpg')" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-bl from-slate-900/90 via-black/80 to-slate-900/90 z-0" />
       
-      {/* Left side form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-300/30 via-gray-50 to-gray-50 dark:from-slate-800/50 dark:via-gray-900 dark:to-gray-900 z-0"></div>
-        
-        <motion.form 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          onSubmit={handleLogin} 
-          className="relative z-10 bg-white/70 dark:bg-gray-800/80 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md"
-        >
+      {/* Decorative Blur Orbs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-600/20 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/3 z-0"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-700/20 rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3 z-0"></div>
+
+      <div className="relative z-10 w-full max-w-5xl flex flex-col md:flex-row-reverse items-center justify-between p-6 gap-12">
+        {/* Right Side Text / Branding */}
+        <div className="hidden md:flex flex-col w-1/2 text-white p-8">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="border-r-4 border-cyan-500 pr-8 py-2 text-right"
+          >
+            <h1 className="text-6xl font-black mb-6 drop-shadow-2xl">Command<br/>Center</h1>
+            <p className="text-xl text-slate-300 font-light max-w-lg ml-auto leading-relaxed drop-shadow-md">
+              Oversee civic reports, manage intelligent triage, and coordinate resolution teams from a centralized, high-security dashboard.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Left side form */}
+        <div className="w-full md:w-1/2 flex items-center justify-center">
+          <motion.form 
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            onSubmit={handleLogin} 
+            className="w-full max-w-md bg-black/40 backdrop-blur-2xl p-8 sm:p-10 rounded-[2rem] shadow-[0_8px_32px_rgb(0,0,0,0.5)] border border-slate-500/30"
+          >
           <div className="flex justify-center mb-6">
              <img src="/logo.jpg" alt="Logo" className="w-16 h-16 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 bg-white p-1" />
           </div>
@@ -64,30 +88,12 @@ export default function AdminLogin() {
           </div>
           <button type="submit" className="w-full bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 hover:shadow-lg hover:shadow-slate-500/30 text-white py-4 rounded-xl font-bold text-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95">Secure Login</button>
           
-          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 text-center text-sm text-gray-600 dark:text-gray-400">
-            <Link href="/" className="font-medium hover:text-gray-900 dark:hover:text-white transition-colors">← Back to Portal Selection</Link>
+          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-3 text-center text-sm text-gray-600 dark:text-gray-400">
+            <p>New Administrator? <Link href="/admin/register" className="text-cyan-500 dark:text-cyan-400 font-bold hover:underline">Register here</Link></p>
+            <Link href="/" className="font-medium hover:text-gray-900 dark:hover:text-white transition-colors mt-2">← Back to Portal Selection</Link>
           </div>
         </motion.form>
       </div>
-
-      {/* Right side Image */}
-      <div className="hidden lg:flex w-1/2 relative overflow-hidden shadow-2xl z-10">
-        <div 
-          className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: "url('/login_bg.jpg')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-bl from-slate-900/80 to-slate-900/95" />
-        <div className="relative z-10 flex flex-col justify-center p-12 text-white w-full h-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="border-l-4 border-cyan-500 pl-8 py-2"
-          >
-            <h1 className="text-5xl font-extrabold mb-6 drop-shadow-lg">Command Center</h1>
-            <p className="text-lg text-slate-300 font-light max-w-md leading-relaxed">Oversee civic reports, manage intelligent triage, and coordinate resolution teams from a centralized, high-security dashboard.</p>
-          </motion.div>
-        </div>
       </div>
     </div>
   );

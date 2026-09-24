@@ -24,7 +24,7 @@ const createIcon = (color: string) => {
 };
 
 const icons = {
-  HIGH: createIcon('red'),
+  SEVERE: createIcon('red'),
   MEDIUM: createIcon('orange'),
   LOW: createIcon('blue'),
   Resolved: createIcon('green')
@@ -65,8 +65,8 @@ export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveM
                 <div className="flex flex-col gap-1 text-xs">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Risk:</span>
-                    <strong className={m.riskLevel === 'HIGH' ? 'text-red-600' : m.riskLevel === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}>
-                      {m.riskLevel === 'HIGH' ? '🔴 ' : m.riskLevel === 'MEDIUM' ? '🟠 ' : '🔵 '}{m.riskLevel}
+                    <strong className={m.riskLevel === 'SEVERE' ? 'text-red-600' : m.riskLevel === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}>
+                      {m.riskLevel === 'SEVERE' ? '🔴 ' : m.riskLevel === 'MEDIUM' ? '🟠 ' : '🔵 '}{m.riskLevel}
                     </strong>
                   </div>
                   <div className="flex justify-between">
