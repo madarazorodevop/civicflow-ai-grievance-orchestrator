@@ -1,18 +1,18 @@
-export const dict = {
+export const dict: Record<string, Record<string, string>> = {
   en: {
     dashboard: "Dashboard",
     report_issue: "Report Issue",
-    map: "Map",
+    map: "Community Map",
     logout: "Logout",
-    submit: "Submit",
-    title: "Title",
-    description: "Description",
+    submit: "Submit Complaint",
+    title: "Complaint Title",
+    description: "Detailed Description",
     category: "Category",
-    photo: "Photo",
-    locate_me: "Locate Me",
+    photo: "Evidence Photo",
+    locate_me: "Detect Location",
     status: "Status",
     priority: "Priority",
-    eta: "Estimated Resolution",
+    eta: "ETA",
   },
   ta: {
     dashboard: "முகப்பு",
@@ -23,10 +23,10 @@ export const dict = {
     title: "தலைப்பு",
     description: "விளக்கம்",
     category: "வகை",
-    photo: "புகைப்படம்",
-    locate_me: "எனது இருப்பிடம்",
+    photo: "படம்",
+    locate_me: "இடத்தை அறி",
     status: "நிலை",
     priority: "முன்னுரிமை",
-    eta: "மதிப்பிடப்பட்ட தீர்வு நேரம்",
+    eta: "தீர்வு நேரம்",
   }
 };

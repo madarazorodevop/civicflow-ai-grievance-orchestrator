@@ -1,6 +1,5 @@
 import os
 import json
-from pydantic import BaseModel
 import openai
 
 class AIProvider:
@@ -29,12 +28,19 @@ class OpenAIProvider(AIProvider):
 class DemoAIProvider(AIProvider):
     def triage_complaint(self, text: str) -> dict:
         text = text.lower()
-        if "fire" in text or "wire" in text or "accident" in text or "collapse" in text or "danger" in text or "emergency" in text:
-            return {"risk_level": "HIGH", "reason": "Immediate hazard detected.", "priority": "HIGH"}
-        elif "pothole" in text or "street" in text or "water" in text or "garbage" in text:
-            return {"risk_level": "MEDIUM", "reason": "Moderate infrastructure issue.", "priority": "MEDIUM"}
+        # More robust keywords to ensure varied risk levels for demo
+        high_words = ["fire", "wire", "accident", "collapse", "danger", "emergency", "blood", "death", "trap", "fall", "hurt", "urgent", "immediate"]
+        med_words = ["pothole", "street", "water", "garbage", "trash", "pipe", "leak", "broken", "damage", "block", "light", "road"]
+        
+        if any(w in text for w in high_words):
+            return {"risk_level": "HIGH", "reason": "Immediate hazard or life-safety issue detected in the description.", "priority": "HIGH"}
+        elif any(w in text for w in med_words):
+            return {"risk_level": "MEDIUM", "reason": "Moderate infrastructure damage or public nuisance detected.", "priority": "MEDIUM"}
         else:
-            return {"risk_level": "LOW", "reason": "No immediate hazard detected.", "priority": "LOW"}
+            # Fallback based on text length to simulate thought
+            if len(text) > 40:
+                return {"risk_level": "MEDIUM", "reason": "Detailed report analyzed as a moderate infrastructure issue.", "priority": "MEDIUM"}
+            return {"risk_level": "LOW", "reason": "No immediate hazards detected; routine maintenance required.", "priority": "LOW"}
 
 def get_ai_provider() -> AIProvider:
     return OpenAIProvider()

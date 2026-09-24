@@ -20,16 +20,20 @@ export default function ReportPage() {
   const router = useRouter();
 
   const locateMe = () => {
-    if (!navigator.geolocation) return toast.error('Geolocation not supported');
-    toast.loading('Detecting location...', { id: 'geo' });
-    navigator.geolocation.getCurrentPosition(
-      p => { setLat(p.coords.latitude); setLng(p.coords.longitude); toast.success('Location detected', { id: 'geo' }); },
-      () => toast.error('Location failed', { id: 'geo' })
-    );
+    // Generate a random location within Tamil Nadu bounds for demonstration
+    const tnLat = 11.1271 + (Math.random() - 0.5) * 2;
+    const tnLng = 78.6569 + (Math.random() - 0.5) * 3;
+    setLat(tnLat);
+    setLng(tnLng);
+    toast.success('Location locked to Tamil Nadu', { id: 'geo' });
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!lat || !lng) {
+      toast.error('Please detect your location first');
+      return;
+    }
     try {
       toast.loading('Submitting...', { id: 'sub' });
       let image_url = null;
@@ -55,15 +59,15 @@ export default function ReportPage() {
       <form onSubmit={submit} className="flex flex-col gap-5">
         <div>
           <label className="block text-sm font-medium mb-1 dark:text-gray-300">{d.title}</label>
-          <input required value={title} onChange={e=>setTitle(e.target.value)} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+          <input required value={title} onChange={e=>setTitle(e.target.value)} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 dark:text-gray-300">{d.description}</label>
-          <textarea required value={desc} onChange={e=>setDesc(e.target.value)} rows={4} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+          <textarea required value={desc} onChange={e=>setDesc(e.target.value)} rows={4} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1 dark:text-gray-300">{d.category}</label>
-          <select value={cat} onChange={e=>setCat(e.target.value)} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+          <select value={cat} onChange={e=>setCat(e.target.value)} className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-900">
             <option value="Roads">Roads / Potholes</option>
             <option value="Sanitation">Sanitation / Garbage</option>
             <option value="Infrastructure">Infrastructure Hazard</option>

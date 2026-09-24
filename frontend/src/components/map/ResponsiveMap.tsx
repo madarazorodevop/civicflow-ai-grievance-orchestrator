@@ -39,8 +39,8 @@ interface ResponsiveMapProps {
 export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveMapProps) {
   return (
     <MapContainer 
-      center={[40.7128, -74.0060]} 
-      zoom={13} 
+      center={[11.1271, 78.6569]} 
+      zoom={7} 
       className={className || "w-full h-full"}
       zoomControl={false}
     >
