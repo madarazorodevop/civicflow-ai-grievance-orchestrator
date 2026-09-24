@@ -96,3 +96,26 @@ def get_dashboard_stats(db: Session):
         "in_progress": len([c for c in complaints if c.status in ["Under Review", "Assigned", "In Progress"]]),
         "resolved": len([c for c in complaints if c.status == "Resolved"])
     }
+
+def create_support_message(db: Session, msg: schemas.SupportMessageCreate, user_id: int):
+    db_msg = models.SupportMessage(user_id=user_id, message=msg.message)
+    db.add(db_msg)
+    db.commit()
+    db.refresh(db_msg)
+    return db_msg
+
+def get_support_messages(db: Session, user_id: int = None, is_admin: bool = False):
+    if is_admin:
+        return db.query(models.SupportMessage).order_by(models.SupportMessage.created_at.desc()).all()
+    return db.query(models.SupportMessage).filter(models.SupportMessage.user_id == user_id).order_by(models.SupportMessage.created_at.desc()).all()
+
+def reply_support_message(db: Session, msg_id: int, reply: str):
+    db_msg = db.query(models.SupportMessage).filter(models.SupportMessage.id == msg_id).first()
+    if db_msg:
+        db_msg.admin_reply = reply
+        db.commit()
+        db.refresh(db_msg)
+        notif = models.Notification(user_id=db_msg.user_id, message="Admin replied to your support message!")
+        db.add(notif)
+        db.commit()
+    return db_msg

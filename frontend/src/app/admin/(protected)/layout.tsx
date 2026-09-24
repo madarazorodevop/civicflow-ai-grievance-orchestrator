@@ -13,16 +13,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const lang = useLangStore(s => s.lang);
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    if (!token || role !== 'admin') {
-      router.push('/admin/login');
-    }
-  }, [token, role, router]);
+    const unsub = useAuthStore.persist.onFinishHydration(() => setIsHydrated(true));
+    setIsHydrated(useAuthStore.persist.hasHydrated());
+    return () => unsub();
+  }, []);
 
-  if (!mounted || !token || role !== 'admin') return null;
+  useEffect(() => {
+    if (isHydrated) {
+      if (!token || role !== 'admin') {
+        router.push('/admin/login');
+      }
+    }
+  }, [isHydrated, token, role, router]);
+
+  if (!isHydrated || !token || role !== 'admin') return null;
   const d = dict[lang];
 
   const links = [
@@ -35,6 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/notifications', icon: Bell, label: d.notifications || 'Notifications' },
     { href: '/admin/profile', icon: User, label: d.profile || 'Profile' },
     { href: '/admin/settings', icon: Settings, label: d.settings || 'Settings' },
+    { href: '/admin/support', icon: Bell, label: 'Support Inbox' },
   ];
 
   return (
@@ -54,7 +62,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Floating Premium Sidebar */}
-      <aside className="w-full md:w-72 bg-white/[0.03] backdrop-blur-[40px] transform-gpu border border-white/[0.08] p-6 flex flex-col overflow-y-auto relative z-10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-full shrink-0">
+      <aside className="w-full md:w-72 bg-white/[0.03] backdrop-blur-[40px] transform-gpu border border-white/[0.08] p-6 flex flex-col overflow-y-scroll relative z-10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-full">
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight flex items-center gap-4">
           <div className="relative p-1 bg-gradient-to-tr from-cyan-600 to-blue-500 rounded-2xl shadow-lg">
             <img src="/logo.jpg" alt="CivicFlow" className="w-10 h-10 rounded-xl bg-white p-0.5" />
@@ -65,7 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {links.map(l => {
             const active = pathname.startsWith(l.href);
             return (
-              <Link key={l.href} href={l.href} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors duration-200 group ${active ? 'bg-gradient-to-r from-cyan-600/80 to-blue-600/80 text-white font-bold shadow-[0_0_20px_rgba(6,182,212,0.3)] border border-white/10' : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'}`}>
+              <Link key={l.href} href={l.href} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors duration-200 group ${active ? 'bg-gradient-to-r from-cyan-600/80 to-blue-600/80 text-white font-bold shadow-[0_0_20px_rgba(6,182,212,0.3)] border border-white/10' : 'text-slate-400 hover:bg-white/[0.06] hover:text-white border border-transparent'}`}>
                 <div className={`shrink-0 transition-colors duration-200 ${active ? 'text-white' : 'text-slate-500 group-hover:text-cyan-400'}`}><l.icon className="w-5 h-5"/></div> 
                 <span className="break-words whitespace-normal leading-tight text-sm tracking-wide">{l.label}</span>
               </Link>

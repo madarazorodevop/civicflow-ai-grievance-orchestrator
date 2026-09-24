@@ -12,6 +12,7 @@ class User(Base):
     is_banned = Column(Integer, default=0) # 0 for false, 1 for true
     complaints = relationship("Complaint", back_populates="user")
     notifications = relationship("Notification", back_populates="user")
+    support_messages = relationship("SupportMessage", back_populates="user")
 
 class Notification(Base):
     __tablename__ = "notifications"
@@ -20,6 +21,16 @@ class Notification(Base):
     message = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     user = relationship("User", back_populates="notifications")
+
+class SupportMessage(Base):
+    __tablename__ = "support_messages"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    message = Column(Text)
+    admin_reply = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    user = relationship("User", back_populates="support_messages")
 
 class Complaint(Base):
     __tablename__ = "complaints"

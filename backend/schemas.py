@@ -10,6 +10,21 @@ class Notification(BaseModel):
     class Config:
         from_attributes = True
 
+class SupportMessageCreate(BaseModel):
+    message: str
+
+class SupportMessageReply(BaseModel):
+    admin_reply: str
+
+class SupportMessage(BaseModel):
+    id: int
+    user_id: int
+    message: str
+    admin_reply: Optional[str] = None
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
 class UserBase(BaseModel):
     email: str
     role: str = "client"

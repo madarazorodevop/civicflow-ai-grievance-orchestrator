@@ -109,3 +109,15 @@ def chat_with_ai(request: schemas.ChatRequest, current_user: models.User = Depen
     except Exception as e:
         print(f"Groq API Error: {e}")
         raise HTTPException(status_code=500, detail="AI Service is currently unavailable")
+
+@router.post("/support/", response_model=schemas.SupportMessage)
+def create_support_message(msg: schemas.SupportMessageCreate, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    return crud.create_support_message(db, msg, current_user.id)
+
+@router.get("/support/", response_model=list[schemas.SupportMessage])
+def get_support_messages(db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    return crud.get_support_messages(db, current_user.id, current_user.role == "admin")
+
+@router.post("/support/{msg_id}/reply", response_model=schemas.SupportMessage)
+def reply_support_message(msg_id: int, reply: schemas.SupportMessageReply, db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
+    return crud.reply_support_message(db, msg_id, reply.admin_reply)

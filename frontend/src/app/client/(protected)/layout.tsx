@@ -14,16 +14,23 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const lang = useLangStore(s => s.lang);
   const router = useRouter();
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    if (!token || role !== 'client') {
-      router.push('/client/login');
-    }
-  }, [token, role, router]);
+    const unsub = useAuthStore.persist.onFinishHydration(() => setIsHydrated(true));
+    setIsHydrated(useAuthStore.persist.hasHydrated());
+    return () => unsub();
+  }, []);
 
-  if (!mounted || !token || role !== 'client') return null;
+  useEffect(() => {
+    if (isHydrated) {
+      if (!token || role !== 'client') {
+        router.push('/client/login');
+      }
+    }
+  }, [isHydrated, token, role, router]);
+
+  if (!isHydrated || !token || role !== 'client') return null;
   const d = dict[lang];
 
   const links = [
@@ -54,7 +61,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </div>
 
       {/* Floating Premium Sidebar */}
-      <aside className="w-full md:w-72 bg-white/[0.03] backdrop-blur-[40px] transform-gpu border border-white/[0.08] p-6 flex flex-col overflow-y-auto relative z-10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-full">
+      <aside className="w-full md:w-72 bg-white/[0.03] backdrop-blur-[40px] transform-gpu border border-white/[0.08] p-6 flex flex-col overflow-y-scroll relative z-10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-full">
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight flex items-center gap-4">
           <div className="relative p-1 bg-gradient-to-tr from-blue-600 to-indigo-400 rounded-2xl shadow-lg">
             <img src="/logo.jpg" alt="CivicFlow" className="w-10 h-10 rounded-xl" />
@@ -65,7 +72,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           {links.map(l => {
             const active = pathname.startsWith(l.href);
             return (
-              <Link key={l.href} href={l.href} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors duration-200 group ${active ? 'bg-gradient-to-r from-blue-600/80 to-indigo-600/80 text-white font-bold shadow-[0_0_20px_rgba(37,99,235,0.3)] border border-white/10' : 'text-gray-400 hover:bg-white/[0.06] hover:text-white'}`}>
+              <Link key={l.href} href={l.href} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-colors duration-200 group ${active ? 'bg-gradient-to-r from-blue-600/80 to-indigo-600/80 text-white font-bold shadow-[0_0_20px_rgba(37,99,235,0.3)] border border-white/10' : 'text-gray-400 hover:bg-white/[0.06] hover:text-white border border-transparent'}`}>
                 <div className={`shrink-0 transition-colors duration-200 ${active ? 'text-white' : 'text-gray-500 group-hover:text-blue-400'}`}><l.icon className="w-5 h-5"/></div> 
                 <span className="break-words whitespace-normal leading-tight text-sm tracking-wide">{l.label}</span>
               </Link>
@@ -73,6 +80,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           })}
         </nav>
         <div className="mt-8 pt-6 border-t border-white/[0.08] flex flex-col gap-4">
+          <Link href="/client/support" className="flex items-center justify-center gap-3 p-3.5 bg-blue-600/20 text-blue-300 font-bold hover:bg-blue-600/40 hover:text-white rounded-2xl w-full transition-colors text-sm tracking-wide border border-blue-500/30">
+            <MessageSquare className="w-5 h-5"/> Customer Support
+          </Link>
           <LangSwitch />
           <button onClick={() => { logout(); router.push('/'); }} className="flex items-center justify-center gap-3 p-3.5 text-red-400/80 font-bold hover:bg-red-500/20 hover:text-red-200 rounded-2xl w-full transition-colors text-sm tracking-wide border border-transparent hover:border-red-500/30"><LogOut className="w-5 h-5"/> {d.logout || 'Logout'}</button>
         </div>
