@@ -1,1 +1,4 @@
-.venv/\n__pycache__/\nsql_app.db\n.env
+.venv/
+__pycache__/
+sql_app.db
+.env

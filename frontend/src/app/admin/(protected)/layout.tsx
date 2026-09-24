@@ -73,9 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
         <div className="mt-8 pt-6 border-t border-white/[0.08] flex flex-col gap-4">
-          <div className="flex gap-2">
-            <LangSwitch />
-          </div>
+          <LangSwitch />
           <button onClick={() => { logout(); router.push('/'); }} className="flex items-center justify-center gap-3 p-3.5 text-red-400/80 font-bold hover:bg-red-500/20 hover:text-red-200 rounded-2xl w-full transition-colors text-sm tracking-wide border border-transparent hover:border-red-500/30"><LogOut className="w-5 h-5"/> {d.logout || 'Secure Logout'}</button>
         </div>
       </aside>

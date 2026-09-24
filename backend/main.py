@@ -5,7 +5,9 @@ from database import engine, Base
 import models
 from routes import router
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI(title="CIVICFLOW API")
 
 app.add_middleware(
