@@ -29,11 +29,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const links = [
     { href: '/client/dashboard', icon: Home, label: d.dashboard || 'Dashboard' },
     { href: '/client/report', icon: FileText, label: d.report_issue || 'Report Problem' },
-    { href: '/client/complaints', icon: List, label: 'My Complaints' },
+    { href: '/client/complaints', icon: List, label: d.my_complaints || 'My Complaints' },
     { href: '/client/map', icon: MapIcon, label: d.map || 'Map' },
-    { href: '/client/notifications', icon: Bell, label: 'Notifications' },
-    { href: '/client/profile', icon: User, label: 'Profile' },
-    { href: '/client/settings', icon: Settings, label: 'Settings' },
+    { href: '/client/notifications', icon: Bell, label: d.notifications || 'Notifications' },
+    { href: '/client/profile', icon: User, label: d.profile || 'Profile' },
+    { href: '/client/settings', icon: Settings, label: d.settings || 'Settings' },
   ];
 
   return (

@@ -1,13 +1,16 @@
 'use client';
-import { useAuthStore } from '@/lib/store';
+import { useAuthStore, useLangStore } from '@/lib/store';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import LangSwitch from '@/components/LangSwitch';
+import { dict } from '@/lib/i18n';
 import { Home, List, Map as MapIcon, Cpu, LogOut, AlertTriangle, BarChart3, Bell, User, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { token, role, logout } = useAuthStore();
+  const lang = useLangStore(s => s.lang);
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -20,17 +23,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [token, role, router]);
 
   if (!mounted || !token || role !== 'admin') return null;
+  const d = dict[lang];
 
   const links = [
-    { href: '/admin/dashboard', icon: Home, label: 'Dashboard' },
-    { href: '/admin/complaints', icon: List, label: 'Complaints' },
-    { href: '/admin/priority', icon: AlertTriangle, label: 'Priority Queue' },
-    { href: '/admin/ai', icon: Cpu, label: 'AI Orchestrator' },
-    { href: '/admin/map', icon: MapIcon, label: 'Map' },
-    { href: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
-    { href: '/admin/notifications', icon: Bell, label: 'Notifications' },
-    { href: '/admin/profile', icon: User, label: 'Profile' },
-    { href: '/admin/settings', icon: Settings, label: 'Settings' },
+    { href: '/admin/dashboard', icon: Home, label: d.dashboard || 'Dashboard' },
+    { href: '/admin/complaints', icon: List, label: d.complaints || 'Complaints' },
+    { href: '/admin/priority', icon: AlertTriangle, label: d.priority_queue || 'Priority Queue' },
+    { href: '/admin/ai', icon: Cpu, label: d.ai || 'AI Orchestrator' },
+    { href: '/admin/map', icon: MapIcon, label: d.map || 'Map' },
+    { href: '/admin/analytics', icon: BarChart3, label: d.analytics || 'Analytics' },
+    { href: '/admin/notifications', icon: Bell, label: d.notifications || 'Notifications' },
+    { href: '/admin/profile', icon: User, label: d.profile || 'Profile' },
+    { href: '/admin/settings', icon: Settings, label: d.settings || 'Settings' },
   ];
 
   return (
@@ -58,7 +62,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
         <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-4">
-          <button onClick={() => { logout(); router.push('/'); }} className="flex items-center gap-3 p-3 text-red-400 font-bold hover:bg-red-500/20 hover:text-red-100 rounded-xl w-full transition-all"><LogOut className="w-5 h-5"/> Secure Logout</button>
+          <div className="flex gap-2">
+            <LangSwitch />
+          </div>
+          <button onClick={() => { logout(); router.push('/'); }} className="flex items-center gap-3 p-3 text-red-400 font-bold hover:bg-red-500/20 hover:text-red-100 rounded-xl w-full transition-all"><LogOut className="w-5 h-5"/> {d.logout || 'Secure Logout'}</button>
         </div>
       </aside>
       
