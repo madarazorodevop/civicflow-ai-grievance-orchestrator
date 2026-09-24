@@ -15,7 +15,7 @@ export default function AdminComplaints() {
     fetchComplaints();
   }, []);
 
-  const filtered = filter === 'ALL' ? complaints : complaints.filter((c: any) => c.ai_risk === filter);
+  const filtered = filter === 'ALL' ? complaints : complaints.filter((c: any) => c.riskLevel === filter);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -48,8 +48,8 @@ export default function AdminComplaints() {
                   <div className="text-xs text-gray-400 mt-1">{c.category} • {new Date(c.created_at).toLocaleDateString()}</div>
                 </td>
                 <td className="p-4">
-                  <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${c.ai_risk === 'HIGH' ? 'bg-red-100 text-red-700' : c.ai_risk === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                    {c.ai_risk} RISK
+                  <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${c.riskLevel === 'HIGH' ? 'bg-red-100 text-red-700' : c.riskLevel === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+                    {c.riskLevel} RISK
                   </span>
                   <div className="text-xs text-gray-500 mt-2 font-medium">ETA: {c.eta}</div>
                 </td>

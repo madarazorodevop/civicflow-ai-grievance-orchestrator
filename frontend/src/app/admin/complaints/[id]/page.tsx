@@ -45,8 +45,8 @@ export default function AdminComplaintDetail() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{c.id}: {c.title}</h1>
             <div className="flex items-center gap-3 text-sm">
               <span className="text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded">{c.category}</span>
-              <span className={`px-2 py-0.5 rounded font-bold ${c.ai_risk === 'HIGH' ? 'bg-red-100 text-red-700' : c.ai_risk === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                {c.ai_risk} RISK
+              <span className={`px-2 py-0.5 rounded font-bold ${c.riskLevel === 'HIGH' ? 'bg-red-100 text-red-700' : c.riskLevel === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+                {c.riskLevel} RISK
               </span>
             </div>
           </div>
@@ -75,12 +75,12 @@ export default function AdminComplaintDetail() {
             <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wide flex items-center gap-2"><Activity className="w-4 h-4"/> AI Orchestrator Analysis</h3>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-slate-500">Risk Severity:</span><strong className={c.ai_risk === 'HIGH' ? 'text-red-600' : 'text-slate-700 dark:text-slate-300'}>{c.ai_risk}</strong></div>
+                <div className="flex justify-between"><span className="text-slate-500">Risk Severity:</span><strong className={c.riskLevel === 'HIGH' ? 'text-red-600' : 'text-slate-700 dark:text-slate-300'}>{c.riskLevel}</strong></div>
                 <div className="flex justify-between"><span className="text-slate-500">Auto-Priority:</span><strong className="text-slate-700 dark:text-slate-300">{c.priority}</strong></div>
                 <div className="flex justify-between"><span className="text-slate-500">Computed ETA:</span><strong className="text-slate-700 dark:text-slate-300">{c.eta}</strong></div>
                 <div className="pt-2 mt-2 border-t border-slate-200 dark:border-slate-700">
                   <span className="text-slate-500 block mb-1">AI Reasoning Context:</span>
-                  <p className="font-mono text-xs text-slate-700 dark:text-slate-400">{c.ai_reason}</p>
+                  <p className="font-mono text-xs text-slate-700 dark:text-slate-400">{c.riskReason}</p>
                 </div>
               </div>
             </div>

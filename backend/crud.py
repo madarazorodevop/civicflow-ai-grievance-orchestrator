@@ -37,9 +37,10 @@ def create_complaint(db: Session, complaint: schemas.ComplaintCreate, user_id: i
         lng=complaint.lng,
         address=complaint.address,
         image_url=complaint.image_url,
-        ai_risk=risk,
-        ai_reason=triage.get("reason", ""),
+        riskLevel=risk,
+        riskReason=triage.get("reason", ""),
         priority=triage.get("priority", "LOW"),
+        analyzedAt=datetime.datetime.utcnow(),
         eta=eta
     )
     db.add(db_c)
@@ -67,9 +68,9 @@ def get_dashboard_stats(db: Session):
     return {
         "total": len(complaints),
         "new": len([c for c in complaints if c.status == "Submitted"]),
-        "high_risk": len([c for c in complaints if c.ai_risk == "HIGH"]),
-        "medium_risk": len([c for c in complaints if c.ai_risk == "MEDIUM"]),
-        "low_risk": len([c for c in complaints if c.ai_risk == "LOW"]),
+        "high_risk": len([c for c in complaints if c.riskLevel == "HIGH"]),
+        "medium_risk": len([c for c in complaints if c.riskLevel == "MEDIUM"]),
+        "low_risk": len([c for c in complaints if c.riskLevel == "LOW"]),
         "in_progress": len([c for c in complaints if c.status in ["Under Review", "Assigned", "In Progress"]]),
         "resolved": len([c for c in complaints if c.status == "Resolved"])
     }

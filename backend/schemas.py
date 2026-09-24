@@ -34,9 +34,10 @@ class Complaint(BaseModel):
     lng: Optional[float]
     address: Optional[str]
     status: str
-    ai_risk: Optional[str]
-    ai_reason: Optional[str]
-    priority: Optional[str]
+    riskLevel: Optional[str] = None
+    riskReason: Optional[str] = None
+    priority: Optional[str] = None
+    analyzedAt: Optional[datetime] = None
     eta: Optional[str]
     created_at: datetime
     resolved_at: Optional[datetime]

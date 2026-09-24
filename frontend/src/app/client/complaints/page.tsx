@@ -33,6 +33,13 @@ export default function ClientComplaints() {
               <p className="text-gray-600 dark:text-gray-400 mb-4">{c.description}</p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg">
                 <div><div className="text-gray-500 mb-1">{d.category || 'Category'}</div><div className="font-medium dark:text-white">{c.category}</div></div>
+                <div>
+                  <div className="text-gray-500 mb-1">AI Risk Assessment</div>
+                  <div className={`font-bold ${c.riskLevel === 'HIGH' ? 'text-red-600' : c.riskLevel === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}`}>
+                    {c.riskLevel === 'HIGH' ? '🔴 ' : c.riskLevel === 'MEDIUM' ? '🟠 ' : '🔵 '}
+                    {c.riskLevel || 'PENDING'}
+                  </div>
+                </div>
                 <div><div className="text-gray-500 mb-1">{d.status || 'Status'}</div><div className="font-medium dark:text-white text-blue-600">{c.status}</div></div>
                 <div><div className="text-gray-500 mb-1">{d.eta || 'ETA'}</div><div className="font-medium dark:text-white">{c.eta}</div></div>
                 <div><div className="text-gray-500 mb-1">Submitted On</div><div className="font-medium dark:text-white">{new Date(c.created_at).toLocaleDateString()}</div></div>

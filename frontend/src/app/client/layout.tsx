@@ -36,13 +36,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50 dark:bg-gray-900">
       <aside className="w-full md:w-64 bg-white dark:bg-gray-800 border-r dark:border-gray-700 p-4 flex flex-col overflow-y-auto">
-        <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-8 tracking-tight">CIVICFLOW</h1>
+        <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-8 tracking-tight flex items-center gap-2">
+          <img src="/logo.jpg" alt="CivicFlow" className="w-8 h-8 rounded-full" />
+          CIVICFLOW
+        </h1>
         <nav className="flex-1 flex flex-col gap-1">
           {links.map(l => {
             const active = pathname.startsWith(l.href);
             return (
               <Link key={l.href} href={l.href} className={`flex items-center gap-3 p-2 rounded-md transition-colors ${active ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-750'}`}>
-                <l.icon className="w-5 h-5"/> {l.label}
+                <div className="shrink-0"><l.icon className="w-5 h-5"/></div> <span className="break-words whitespace-normal leading-tight">{l.label}</span>
               </Link>
             );
           })}

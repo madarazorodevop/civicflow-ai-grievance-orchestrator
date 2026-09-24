@@ -12,14 +12,14 @@ export default function AdminNotifications() {
 
   // Filter recent high risk for admin alerts
   const notifications = complaints
-    .filter(c => c.ai_risk === 'HIGH' || c.status === 'Submitted')
+    .filter(c => c.riskLevel === 'HIGH' || c.status === 'Submitted')
     .slice(0, 10)
     .map(c => ({
       id: c.id,
-      title: c.ai_risk === 'HIGH' ? `Critical Alert: ${c.title}` : `New Submission: ${c.title}`,
-      message: `Risk: ${c.ai_risk}. Current Status: ${c.status}`,
+      title: c.riskLevel === 'HIGH' ? `Critical Alert: ${c.title}` : `New Submission: ${c.title}`,
+      message: `Risk: ${c.riskLevel}. Current Status: ${c.status}`,
       date: new Date(c.created_at).toLocaleDateString(),
-      isHigh: c.ai_risk === 'HIGH'
+      isHigh: c.riskLevel === 'HIGH'
     }));
 
   return (

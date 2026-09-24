@@ -34,7 +34,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex flex-col md:flex-row h-screen bg-gray-50 dark:bg-gray-900">
       <aside className="w-full md:w-64 bg-slate-900 text-slate-300 p-4 flex flex-col shrink-0 overflow-y-auto">
-        <h1 className="text-2xl font-bold text-white mb-8 tracking-tight">CIVICFLOW <span className="text-sm font-normal text-slate-400">Admin</span></h1>
+        <h1 className="text-2xl font-bold text-white mb-8 tracking-tight flex items-center gap-2">
+          <img src="/logo.jpg" alt="CivicFlow" className="w-8 h-8 rounded-full bg-white p-0.5" />
+          CIVICFLOW <span className="text-sm font-normal text-slate-400">Admin</span>
+        </h1>
         <nav className="flex-1 flex flex-col gap-1">
           {links.map(l => {
             const active = pathname.startsWith(l.href);

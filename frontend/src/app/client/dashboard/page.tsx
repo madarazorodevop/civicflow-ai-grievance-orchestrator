@@ -19,18 +19,28 @@ export default function ClientDashboard() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Citizen Portal</h1>
-      
+      {/* Dashboard Banner */}
+      <div className="relative rounded-3xl overflow-hidden shadow-xl h-48 md:h-64 flex items-center p-8 bg-gray-900 text-white">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-60"
+          style={{ backgroundImage: "url('/dashboard_banner.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-transparent" />
+        <div className="relative z-10 w-full">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-md mb-2">Citizen Portal</h1>
+          <p className="text-blue-100 font-light text-lg">Welcome back. Manage and track your civic reports.</p>
+        </div>
+      </div>
       <div className="grid md:grid-cols-2 gap-6">
         <Link href="/client/report" className="flex items-center gap-4 p-6 bg-blue-600 text-white rounded-2xl shadow-md hover:bg-blue-700 transition-colors group">
-          <div className="p-4 bg-white/20 rounded-xl group-hover:scale-110 transition-transform"><FileText className="w-8 h-8" /></div>
+          <div className="shrink-0 p-4 bg-white/20 rounded-xl group-hover:scale-110 transition-transform"><FileText className="w-8 h-8" /></div>
           <div>
-            <h2 className="text-xl font-bold">{d.report_issue || 'Report a Problem'}</h2>
+            <h2 className="text-xl font-bold break-words">{d.report_issue || 'Report a Problem'}</h2>
             <p className="opacity-90 text-sm mt-1">Submit a new civic issue for immediate AI triage.</p>
           </div>
         </Link>
         <Link href="/client/map" className="flex items-center gap-4 p-6 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all group">
-          <div className="p-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl group-hover:scale-110 transition-transform"><MapIcon className="w-8 h-8" /></div>
+          <div className="shrink-0 p-4 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl group-hover:scale-110 transition-transform"><MapIcon className="w-8 h-8" /></div>
           <div>
             <h2 className="text-xl font-bold">{d.map || 'Community Map'}</h2>
             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">View active civic issues around your area.</p>

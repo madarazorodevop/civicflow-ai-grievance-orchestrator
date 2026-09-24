@@ -40,7 +40,7 @@ export default function AIOrchestrator() {
               <div className="flex flex-col gap-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Risk Level:</span>
-                  <strong className={c.ai_risk === 'HIGH' ? 'text-red-600' : c.ai_risk === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}>{c.ai_risk}</strong>
+                  <strong className={c.riskLevel === 'HIGH' ? 'text-red-600' : c.riskLevel === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}>{c.riskLevel}</strong>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Priority:</span>
@@ -52,7 +52,7 @@ export default function AIOrchestrator() {
                 </div>
                 <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <span className="text-gray-500 block mb-1">AI Reasoning:</span>
-                  <p className="text-gray-700 dark:text-gray-300 font-mono text-xs">{c.ai_reason}</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-mono text-xs">{c.riskReason}</p>
                 </div>
               </div>
             </div>

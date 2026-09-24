@@ -38,9 +38,9 @@ interface ResponsiveMapProps {
 
 export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveMapProps) {
   return (
-    <MapContainer 
-      center={[11.1271, 78.6569]} 
-      zoom={7} 
+    <MapContainer
+      center={[11.1271, 78.6569]}
+      zoom={7}
       className={className || "w-full h-full"}
       zoomControl={false}
     >
@@ -50,19 +50,37 @@ export function ResponsiveMap({ markers, onMarkerClick, className }: ResponsiveM
       />
       {markers.map(m => (
         m.lat && m.lng ? (
-          <Marker 
-            key={m.id} 
-            position={[m.lat, m.lng]} 
-            icon={m.status === 'Resolved' ? icons.Resolved : (icons as any)[m.ai_risk] || icons.LOW}
+          <Marker
+            key={m.id}
+            position={[m.lat, m.lng]}
+            icon={m.status === 'Resolved' ? icons.Resolved : (icons as any)[m.riskLevel] || icons.LOW}
             eventHandlers={{ click: () => onMarkerClick(m.id) }}
           >
             <Popup>
-              <div className="p-1">
-                <h3 className="font-bold">{m.title}</h3>
-                <p className="text-xs text-gray-500 mb-2">{m.category}</p>
-                <div className="flex justify-between items-center text-xs">
-                  <span className={`px-2 py-0.5 rounded font-bold ${m.ai_risk === 'HIGH' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>{m.ai_risk}</span>
-                  <span className="text-gray-500">{m.status}</span>
+              <div className="p-2 min-w-[200px]">
+                <div className="mb-2 border-b pb-1">
+                  <span className="text-[10px] text-gray-500 uppercase tracking-wider block">Problem</span>
+                  <h3 className="font-bold text-sm">{m.title}</h3>
+                </div>
+                <div className="flex flex-col gap-1 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Risk:</span>
+                    <strong className={m.riskLevel === 'HIGH' ? 'text-red-600' : m.riskLevel === 'MEDIUM' ? 'text-orange-600' : 'text-blue-600'}>
+                      {m.riskLevel === 'HIGH' ? '🔴 ' : m.riskLevel === 'MEDIUM' ? '🟠 ' : '🔵 '}{m.riskLevel}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Priority:</span>
+                    <strong>{m.priority || m.riskLevel}</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Status:</span>
+                    <strong>{m.status}</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">ETA:</span>
+                    <strong>{m.eta}</strong>
+                  </div>
                 </div>
               </div>
             </Popup>

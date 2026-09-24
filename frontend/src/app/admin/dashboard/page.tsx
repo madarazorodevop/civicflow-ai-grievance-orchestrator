@@ -25,8 +25,8 @@ export default function AdminDashboard() {
   ];
 
   const priorityQueue = complaints
-    .filter(c => (c.ai_risk === 'HIGH' || c.ai_risk === 'MEDIUM') && c.status !== 'Resolved')
-    .sort((a, b) => a.ai_risk === 'HIGH' ? -1 : 1)
+    .filter(c => (c.riskLevel === 'HIGH' || c.riskLevel === 'MEDIUM') && c.status !== 'Resolved')
+    .sort((a, b) => a.riskLevel === 'HIGH' ? -1 : 1)
     .slice(0, 5);
 
   const recent = [...complaints].slice(0, 5);
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
               <div key={c.id} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-700 text-sm">
                 <div className="flex justify-between items-start mb-1">
                   <strong className="dark:text-white">{c.id}</strong>
-                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${c.ai_risk === 'HIGH' ? 'bg-red-200 text-red-800' : 'bg-orange-200 text-orange-800'}`}>{c.ai_risk}</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${c.riskLevel === 'HIGH' ? 'bg-red-200 text-red-800' : 'bg-orange-200 text-orange-800'}`}>{c.riskLevel}</span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 truncate mb-2">{c.title}</p>
                 <Link href={`/admin/complaints/${c.id}`} className="text-blue-600 hover:underline text-xs font-bold">Manage &rarr;</Link>
@@ -87,8 +87,8 @@ export default function AdminDashboard() {
                       <div className="text-gray-500 text-xs mt-0.5">{c.category}</div>
                     </td>
                     <td className="py-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.ai_risk === 'HIGH' ? 'bg-red-100 text-red-700' : c.ai_risk === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                        {c.ai_risk}
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.riskLevel === 'HIGH' ? 'bg-red-100 text-red-700' : c.riskLevel === 'MEDIUM' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+                        {c.riskLevel}
                       </span>
                     </td>
                     <td className="py-3 font-medium dark:text-gray-300">{c.status}</td>

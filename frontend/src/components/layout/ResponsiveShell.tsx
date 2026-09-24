@@ -23,7 +23,10 @@ export function ResponsiveShell({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen w-full bg-gray-50 flex-col lg:flex-row overflow-hidden">
       {/* Mobile Top Header */}
       <header className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm z-20">
-        <div className="text-xl font-bold text-blue-600 tracking-tight">CIVICFLOW</div>
+        <div className="text-xl font-bold text-blue-600 tracking-tight flex items-center gap-2">
+          <img src="/logo.jpg" alt="CivicFlow" className="w-8 h-8 rounded-full" />
+          CIVICFLOW
+        </div>
         <button
           className="p-2 -mr-2 text-gray-500 hover:text-gray-700"
           onClick={() => setIsMobileMenuOpen(true)}
@@ -44,7 +47,10 @@ export function ResponsiveShell({ children }: { children: React.ReactNode }) {
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="text-xl font-bold text-blue-600 mb-8 mt-2">CIVICFLOW</div>
+            <div className="text-xl font-bold text-blue-600 mb-8 mt-2 flex items-center gap-2">
+              <img src="/logo.jpg" alt="CivicFlow" className="w-8 h-8 rounded-full" />
+              CIVICFLOW
+            </div>
             <nav className="flex flex-col gap-2">
               {NAV_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
@@ -73,7 +79,10 @@ export function ResponsiveShell({ children }: { children: React.ReactNode }) {
       {/* Desktop Persistent Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-gray-200 z-10">
         <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-200">
-          <span className="text-2xl font-bold text-blue-600 tracking-tight">CIVICFLOW</span>
+          <span className="text-2xl font-bold text-blue-600 tracking-tight flex items-center gap-2">
+            <img src="/logo.jpg" alt="CivicFlow" className="w-8 h-8 rounded-full" />
+            CIVICFLOW
+          </span>
         </div>
         <nav className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-2">
           {NAV_ITEMS.map((item) => {

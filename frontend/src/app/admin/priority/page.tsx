@@ -10,8 +10,8 @@ export default function PriorityQueue() {
   useEffect(() => {
     api.get('/complaints/').then(res => {
       // Filter only HIGH and MEDIUM, sort by HIGH first
-      const critical = res.data.filter((c: any) => c.ai_risk === 'HIGH' || c.ai_risk === 'MEDIUM' && c.status !== 'Resolved');
-      critical.sort((a: any, b: any) => (a.ai_risk === 'HIGH' ? -1 : 1));
+      const critical = res.data.filter((c: any) => c.riskLevel === 'HIGH' || c.riskLevel === 'MEDIUM' && c.status !== 'Resolved');
+      critical.sort((a: any, b: any) => (a.riskLevel === 'HIGH' ? -1 : 1));
       setComplaints(critical);
     });
   }, []);
@@ -29,10 +29,10 @@ export default function PriorityQueue() {
             No critical or high-priority items currently in the queue.
           </div>
         ) : complaints.map((c: any) => (
-          <div key={c.id} className={`p-5 rounded-xl border flex items-center justify-between ${c.ai_risk === 'HIGH' ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900' : 'bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-900'}`}>
+          <div key={c.id} className={`p-5 rounded-xl border flex items-center justify-between ${c.riskLevel === 'HIGH' ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900' : 'bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-900'}`}>
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className={`px-2 py-1 text-xs font-bold rounded ${c.ai_risk === 'HIGH' ? 'bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-200 text-orange-800 dark:bg-orange-900 dark:text-orange-200'}`}>{c.ai_risk} PRIORITY</span>
+                <span className={`px-2 py-1 text-xs font-bold rounded ${c.riskLevel === 'HIGH' ? 'bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-orange-200 text-orange-800 dark:bg-orange-900 dark:text-orange-200'}`}>{c.riskLevel} PRIORITY</span>
                 <span className="text-sm font-bold text-gray-900 dark:text-white">{c.id}</span>
               </div>
               <h3 className="font-bold text-lg text-gray-900 dark:text-white">{c.title}</h3>
