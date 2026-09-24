@@ -41,7 +41,7 @@ export default function AdminComplaints() {
           </thead>
           <tbody>
             {filtered.map((c: any) => (
-              <tr key={c.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750/50">
+              <tr key={c.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/10 transition-colors">
                 <td className="p-4">
                   <div className="font-bold text-gray-900 dark:text-white">{c.id}</div>
                   <div className="text-gray-600 dark:text-gray-400 mt-1">{c.title}</div>

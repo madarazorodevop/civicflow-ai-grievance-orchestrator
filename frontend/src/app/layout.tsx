@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CIVICFLOW v0.7",
+  title: "CIVICFLOW v0.8",
   description: "AI-powered civic grievance resolution platform",
 };
 

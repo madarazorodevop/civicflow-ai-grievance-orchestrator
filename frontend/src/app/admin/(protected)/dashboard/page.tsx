@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import Link from 'next/link';
 
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend } from 'recharts';
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [complaints, setComplaints] = useState<any[]>([]);
@@ -31,6 +33,12 @@ export default function AdminDashboard() {
 
   const recent = [...complaints].slice(0, 5);
 
+  const pieData = [
+    { name: 'Severe Risk', value: stats.severe_risk, color: '#ef4444' },
+    { name: 'Medium Risk', value: stats.medium_risk, color: '#f97316' },
+    { name: 'Low Risk', value: stats.low_risk, color: '#3b82f6' }
+  ];
+
   return (
     <div className="max-w-7xl mx-auto space-y-8">
       <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">CIVICFLOW ADMIN DASHBOARD</h1>
@@ -52,7 +60,7 @@ export default function AdminDashboard() {
           <div className="flex flex-col gap-3 flex-1">
             {priorityQueue.length === 0 ? <p className="text-sm text-gray-500">No critical pending issues.</p> : null}
             {priorityQueue.map(c => (
-              <div key={c.id} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-700 text-sm">
+              <div key={c.id} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-700 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <div className="flex justify-between items-start mb-1">
                   <strong className="dark:text-white">{c.id}</strong>
                   <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${c.riskLevel === 'SEVERE' ? 'bg-red-200 text-red-800' : 'bg-orange-200 text-orange-800'}`}>{c.riskLevel}</span>
@@ -81,7 +89,7 @@ export default function AdminDashboard() {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {recent.length === 0 ? <tr><td colSpan={4} className="py-4 text-gray-500">0 complaints</td></tr> : null}
                 {recent.map(c => (
-                  <tr key={c.id} className="hover:bg-gray-50 dark:hover:bg-gray-750/50 transition-colors">
+                  <tr key={c.id} className="hover:bg-gray-50 dark:hover:bg-white/10 transition-colors">
                     <td className="py-3">
                       <Link href={`/admin/complaints/${c.id}`} className="font-bold text-blue-600 dark:text-blue-400 hover:underline">{c.id}</Link>
                       <div className="text-gray-500 text-xs mt-0.5">{c.category}</div>
@@ -99,6 +107,36 @@ export default function AdminDashboard() {
             </table>
           </div>
           <Link href="/admin/complaints" className="block mt-4 text-center text-sm font-bold text-slate-600 dark:text-slate-400 hover:underline">View All Complaints</Link>
+        </div>
+      </div>
+
+      {/* Analysis Pie Chart */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mt-8">
+        <h2 className="text-lg font-bold mb-4 dark:text-white border-b pb-2 dark:border-gray-700">RISK DISTRIBUTION ANALYSIS</h2>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={5}
+                dataKey="value"
+                stroke="none"
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <RechartsTooltip 
+                contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#fff', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff' }}
+              />
+              <Legend verticalAlign="bottom" height={36}/>
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

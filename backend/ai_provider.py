@@ -29,7 +29,7 @@ class DemoAIProvider(AIProvider):
     def triage_complaint(self, text: str) -> dict:
         text = text.lower()
         # More robust keywords to ensure varied risk levels for demo
-        high_words = ["fire", "wire", "accident", "collapse", "danger", "emergency", "blood", "death", "trap", "fall", "hurt", "urgent", "immediate"]
+        high_words = ["fire", "wire", "accident", "collapse", "danger", "emergency", "blood", "death", "trap", "fall", "hurt", "urgent", "immediate", "robbery", "gang", "assault", "gun", "knife", "violent", "violence", "kill", "contamination", "hazard", "poison", "toxic", "epidemic", "outbreak", "disease", "illness", "mass"]
         med_words = ["pothole", "street", "water", "garbage", "trash", "pipe", "leak", "broken", "damage", "block", "light", "road"]
         
         if any(w in text for w in high_words):

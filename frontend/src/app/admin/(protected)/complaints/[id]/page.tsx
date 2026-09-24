@@ -5,6 +5,12 @@ import toast from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Clock, MapPin, ShieldAlert, Activity } from 'lucide-react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const ResponsiveMap = dynamic(() => import('@/components/map/ResponsiveMap').then(m => m.ResponsiveMap), {
+  ssr: false,
+  loading: () => <div className="w-full h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center animate-pulse">Loading Map...</div>
+});
 
 export default function AdminComplaintDetail() {
   const { id } = useParams();
@@ -112,8 +118,8 @@ export default function AdminComplaintDetail() {
             <div>
               <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide flex items-center gap-2"><MapPin className="w-4 h-4"/> Geolocation</h3>
               {c.lat && c.lng ? (
-                <div className="text-gray-800 dark:text-gray-200 font-mono text-sm bg-gray-100 dark:bg-gray-800 p-3 rounded">
-                  {c.lat}, {c.lng}
+                <div className="w-full h-64 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden relative z-0">
+                  <ResponsiveMap markers={[c]} onMarkerClick={() => {}} />
                 </div>
               ) : (
                 <span className="text-gray-400 italic">No coordinates provided.</span>

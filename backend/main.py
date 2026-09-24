@@ -23,7 +23,7 @@ app.include_router(router, prefix="/api")
 
 @app.get("/")
 def root():
-    return {"status": "ok", "version": "0.7"}
+    return {"status": "ok", "version": "0.8"}
 
 # Initialize DB on startup
 @app.on_event("startup")

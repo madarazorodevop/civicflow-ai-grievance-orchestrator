@@ -6,6 +6,12 @@ import { dict } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { MapPin, Camera } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const LocationPickerMap = dynamic(() => import('@/components/map/LocationPickerMap').then(m => m.LocationPickerMap), {
+  ssr: false,
+  loading: () => <div className="w-full h-64 bg-black/20 flex items-center justify-center animate-pulse">Loading Live Map...</div>
+});
 
 export default function ReportPage() {
   const [title, setTitle] = useState('');
@@ -14,6 +20,7 @@ export default function ReportPage() {
   const [lat, setLat] = useState<number|null>(null);
   const [lng, setLng] = useState<number|null>(null);
   const [file, setFile] = useState<File|null>(null);
+  const [addressInput, setAddressInput] = useState('');
   
   const lang = useLangStore(s => s.lang);
   const d = dict[lang];
@@ -36,6 +43,24 @@ export default function ReportPage() {
       );
     } else {
       toast.error('Geolocation is not supported by your browser', { id: 'geo' });
+    }
+  };
+
+  const geocodeAddress = async () => {
+    if (!addressInput) return;
+    toast.loading('Searching...', { id: 'geo' });
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addressInput)}`);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        setLat(parseFloat(data[0].lat));
+        setLng(parseFloat(data[0].lon));
+        toast.success('Location found! You can drag the map if needed.', { id: 'geo' });
+      } else {
+        toast.error('Address not found', { id: 'geo' });
+      }
+    } catch {
+      toast.error('Search failed', { id: 'geo' });
     }
   };
 
@@ -88,6 +113,11 @@ export default function ReportPage() {
             <option className="bg-gray-800" value="Noise">Noise Pollution</option>
             <option className="bg-gray-800" value="Animals">Animal Control / Strays</option>
             <option className="bg-gray-800" value="Safety">Public Safety / Vandalism</option>
+            <option className="bg-gray-800 text-red-400 font-bold" value="Gang Violence">Gang Violence</option>
+            <option className="bg-gray-800 text-red-400 font-bold" value="Water Contamination">Water Contamination</option>
+            <option className="bg-gray-800 text-red-400 font-bold" value="Armed Robbery">Armed Robbery</option>
+            <option className="bg-gray-800 text-red-400 font-bold" value="Assault">Assault / Battery</option>
+            <option className="bg-gray-800 text-red-400 font-bold" value="Mass Health Hazard">Mass Health Hazard</option>
           </select>
         </div>
         <div>
@@ -101,13 +131,30 @@ export default function ReportPage() {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold mb-2 text-gray-200">Location</label>
-          <div className="flex items-center gap-4">
-            <button type="button" onClick={locateMe} className="flex items-center gap-2 px-5 py-4 bg-blue-500/20 text-blue-200 hover:bg-blue-500/40 border border-blue-400/30 rounded-xl font-bold transition-all shadow-lg">
-              <MapPin className="w-5 h-5"/> {d.locate_me}
+          <label className="block text-sm font-semibold mb-2 text-gray-200">Precise Location</label>
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <button type="button" onClick={locateMe} className="flex items-center gap-2 px-5 py-4 bg-blue-500/20 text-blue-200 hover:bg-blue-500/40 border border-blue-400/30 rounded-xl font-bold transition-all shadow-lg shrink-0">
+              <MapPin className="w-5 h-5"/> Auto Detect
             </button>
-            {lat && lng && <span className="text-sm font-mono text-gray-300">{lat.toFixed(4)}, {lng.toFixed(4)}</span>}
+            <div className="flex-1 flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Or search address manually..." 
+                value={addressInput} 
+                onChange={e => setAddressInput(e.target.value)} 
+                className="w-full p-4 border border-white/20 rounded-xl bg-black/20 text-white outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all shadow-inner backdrop-blur-md"
+              />
+              <button type="button" onClick={geocodeAddress} className="px-5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl font-bold text-white transition-colors shrink-0 shadow-lg">
+                Search
+              </button>
+            </div>
           </div>
+          
+          <div className="w-full border border-white/20 rounded-xl overflow-hidden shadow-inner relative z-0">
+            <LocationPickerMap lat={lat} lng={lng} onChange={(l, g) => { setLat(l); setLng(g); }} />
+          </div>
+          <p className="text-xs text-gray-400 mt-2">Click anywhere on the map to place a precise pin.</p>
+          {lat && lng && <p className="text-sm font-mono text-gray-300 mt-2 text-center">Selected Coordinates: {lat.toFixed(5)}, {lng.toFixed(5)}</p>}
         </div>
         <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-lg py-5 rounded-2xl mt-4 transition-all hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.7)] shadow-xl border border-blue-400/30">
           {d.submit}
