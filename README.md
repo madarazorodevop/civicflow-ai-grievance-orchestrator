@@ -24,23 +24,72 @@ CIVICFLOW is an AI-powered civic technology platform designed to streamline muni
 4. **Live Orchestrator UI**: Real-time observability of autonomous AI agents executing tasks.
 5. **Interactive Mapping**: Dedicated interactive map built on Leaflet with touch-friendly bottom sheets.
 
-## ⚙️ Setup & Deployment
+## ⚙️ Setup & Deployment (Cross-Platform)
 
-### Backend Setup (FastAPI)
+### 1. Install Prerequisites
+You will need **Python 3.10+**, **Node.js 18+**, and **Git**. Choose your Operating System below:
+
+#### 🐧 Linux
+**Debian / Ubuntu**
+```bash
+sudo apt update && sudo apt install -y python3 python3-venv python3-pip nodejs npm git
+```
+**Fedora**
+```bash
+sudo dnf install -y python3 python3-pip nodejs npm git
+```
+**Arch Linux**
+```bash
+sudo pacman -S python python-pip nodejs npm git
+```
+
+#### 🪟 Windows
+Using [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) in PowerShell:
+```powershell
+winget install Python.Python.3.11 OpenJS.NodeJS Git.Git
+```
+*(Alternatively, download the installers directly from the official Python and Node.js websites).*
+
+#### 🍎 macOS
+Using [Homebrew](https://brew.sh/):
+```bash
+brew install python node git
+```
+
+### 2. Clone the Repository
+```bash
+git clone https://github.com/madarazorodevop/civicflow-ai-grievance-orchestrator.git
+cd civicflow-ai-grievance-orchestrator
+```
+
+### 3. Backend Setup (FastAPI)
 ```bash
 cd backend
 python3 -m venv .venv
+
+# On Linux/macOS:
 source .venv/bin/activate
-pip install -r requirements.txt # (or install directly)
+# On Windows:
+# .venv\Scripts\activate
+
+# Install requirements
+pip install -r requirements.txt
+# (or manually: pip install fastapi uvicorn sqlalchemy passlib python-jose python-multipart requests python-dotenv)
+
 cp .env.example .env
-# Edit .env with your OPENAI_API_KEY
+# Edit .env and add your API Keys (e.g., GROQ_API_KEY)
+
+# Start the server (runs on http://localhost:8000)
 uvicorn main:app --reload
 ```
 
-### Frontend Setup (Next.js)
+### 4. Frontend Setup (Next.js)
+Open a new terminal window:
 ```bash
 cd frontend
 npm install
+
+# Start the dev server (runs on http://localhost:3000)
 npm run dev
 ```
 
