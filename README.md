@@ -1,10 +1,10 @@
-# CIVICFLOW v0.9.2
+# CIVICFLOW v0.9.5
 **AI-Powered Civic Grievance Resolution Orchestrator**
 
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)]()
-[![Version](https://img.shields.io/badge/Version-0.9.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/Version-0.9.5-blue.svg)]()
 
 CIVICFLOW is an AI-powered civic technology platform designed to streamline municipal complaint reporting, intelligent triage, and SLA enforcement.
 
@@ -23,6 +23,7 @@ CIVICFLOW is an AI-powered civic technology platform designed to streamline muni
 3. **Smart Routing**: Autonomous agents map tickets to correct municipal departments.
 4. **Live Orchestrator UI**: Real-time observability of autonomous AI agents executing tasks.
 5. **Interactive Mapping**: Dedicated interactive map built on Leaflet with touch-friendly bottom sheets.
+6. **Customer Support Portal**: Integrated direct messaging system connecting citizens to administrators.
 
 ## ⚙️ Setup & Deployment (Cross-Platform)
 
