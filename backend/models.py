@@ -1,48 +1,33 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Enum, ForeignKey
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
-import enum
-
+import datetime
 from database import Base
 
-class ComplaintStatus(str, enum.Enum):
-    OPEN = "OPEN"
-    IN_PROGRESS = "IN_PROGRESS"
-    RESOLVED = "RESOLVED"
-    REJECTED = "REJECTED"
-
-class ComplaintPriority(str, enum.Enum):
-    LOW = "LOW"
-    MEDIUM = "MEDIUM"
-    HIGH = "HIGH"
-    CRITICAL = "CRITICAL"
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    role = Column(String, default="client")
+    complaints = relationship("Complaint", back_populates="user")
 
 class Complaint(Base):
     __tablename__ = "complaints"
-
-    id = Column(Integer, primary_key=True, index=True)
-    reference_id = Column(String, unique=True, index=True) # e.g. CF-1042
-    title = Column(String, index=True)
-    description = Column(String)
-    category = Column(String, index=True)
-    
-    # Location
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    title = Column(String)
+    description = Column(Text)
+    category = Column(String)
+    image_url = Column(String, nullable=True)
     lat = Column(Float, nullable=True)
     lng = Column(Float, nullable=True)
     address = Column(String, nullable=True)
+    status = Column(String, default="Submitted")
+    ai_risk = Column(String, nullable=True)
+    ai_reason = Column(String, nullable=True)
+    priority = Column(String, nullable=True)
+    eta = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    resolved_at = Column(DateTime, nullable=True)
     
-    # Status and tracking
-    status = Column(Enum(ComplaintStatus), default=ComplaintStatus.OPEN)
-    priority = Column(Enum(ComplaintPriority), default=ComplaintPriority.MEDIUM)
-    department = Column(String, nullable=True)
-    
-    # Timestamps
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    sla_deadline = Column(DateTime(timezone=True), nullable=True)
-    
-    # User / Submitter
-    submitter_id = Column(String, nullable=True) # Could link to a User table later
-    
-    # Image URL
-    image_url = Column(String, nullable=True)
+    user = relationship("User", back_populates="complaints")

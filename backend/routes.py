@@ -1,36 +1,65 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from typing import List
-import models, schemas, crud
 from database import get_db
-
-from ai_provider import get_ai_provider
-import logging
-
-logger = logging.getLogger(__name__)
+import schemas, crud, auth, models
+import shutil
+import os
+import uuid
 
 router = APIRouter()
 
-@router.post("/complaints/", response_model=schemas.ComplaintResponse, status_code=status.HTTP_201_CREATED)
-async def create_complaint(complaint: schemas.ComplaintCreate, db: Session = Depends(get_db)):
-    ai_provider = get_ai_provider()
-    triage_result = None
-    try:
-        triage_result = await ai_provider.triage_complaint(description=complaint.description, image_url=complaint.image_url)
-    except Exception as e:
-        logger.error(f"Failed to triage complaint with AI: {e}")
-        # Proceed with creation anyway, falling back to basic defaults
+@router.post("/auth/register", response_model=schemas.User)
+def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    db_user = crud.get_user_by_email(db, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return crud.create_user(db=db, user=user)
 
-    return crud.create_complaint(db=db, complaint=complaint, triage_result=triage_result)
+@router.post("/auth/token", response_model=schemas.Token)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, form_data.username)
+    if not user or not auth.verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    access_token = auth.create_access_token(data={"sub": user.email})
+    return {"access_token": access_token, "token_type": "bearer", "role": user.role}
 
-@router.get("/complaints/", response_model=List[schemas.ComplaintResponse])
-def read_complaints(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    complaints = crud.get_complaints(db, skip=skip, limit=limit)
-    return complaints
+@router.post("/upload")
+def upload_file(file: UploadFile = File(...)):
+    ext = file.filename.split('.')[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+    os.makedirs("uploads", exist_ok=True)
+    with open(f"uploads/{filename}", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {"url": f"/uploads/{filename}"}
 
-@router.get("/complaints/{complaint_id}", response_model=schemas.ComplaintResponse)
-def read_complaint(complaint_id: int, db: Session = Depends(get_db)):
-    db_complaint = crud.get_complaint(db, complaint_id=complaint_id)
-    if db_complaint is None:
+@router.post("/complaints/", response_model=schemas.Complaint)
+def create_complaint(complaint: schemas.ComplaintCreate, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    if current_user.role != "client":
+        raise HTTPException(status_code=403, detail="Only clients can create complaints")
+    return crud.create_complaint(db, complaint, current_user.id)
+
+@router.get("/complaints/", response_model=list[schemas.Complaint])
+def read_complaints(db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    return crud.get_complaints(db, user_id=current_user.id, is_admin=(current_user.role=="admin"))
+
+@router.patch("/complaints/{complaint_id}/status", response_model=schemas.Complaint)
+def update_status(complaint_id: str, update: schemas.ComplaintUpdate, db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
+    return crud.update_complaint_status(db, complaint_id, update.status)
+
+@router.get("/stats/")
+def get_stats(db: Session = Depends(get_db), current_admin: models.User = Depends(auth.get_current_admin)):
+    return crud.get_dashboard_stats(db)
+
+@router.get("/complaints/{complaint_id}", response_model=schemas.Complaint)
+def read_complaint(complaint_id: str, db: Session = Depends(get_db), current_user: models.User = Depends(auth.get_current_user)):
+    db_c = db.query(models.Complaint).filter(models.Complaint.id == complaint_id).first()
+    if not db_c:
         raise HTTPException(status_code=404, detail="Complaint not found")
-    return db_complaint
+    if current_user.role != "admin" and db_c.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this complaint")
+    return db_c
+
+@router.get("/users/me", response_model=schemas.User)
+def read_users_me(current_user: models.User = Depends(auth.get_current_user)):
+    return current_user

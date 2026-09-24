@@ -1,0 +1,32 @@
+export const dict = {
+  en: {
+    dashboard: "Dashboard",
+    report_issue: "Report Issue",
+    map: "Map",
+    logout: "Logout",
+    submit: "Submit",
+    title: "Title",
+    description: "Description",
+    category: "Category",
+    photo: "Photo",
+    locate_me: "Locate Me",
+    status: "Status",
+    priority: "Priority",
+    eta: "Estimated Resolution",
+  },
+  ta: {
+    dashboard: "முகப்பு",
+    report_issue: "புகார் அளி",
+    map: "வரைபடம்",
+    logout: "வெளியேறு",
+    submit: "சமர்ப்பி",
+    title: "தலைப்பு",
+    description: "விளக்கம்",
+    category: "வகை",
+    photo: "புகைப்படம்",
+    locate_me: "எனது இருப்பிடம்",
+    status: "நிலை",
+    priority: "முன்னுரிமை",
+    eta: "மதிப்பிடப்பட்ட தீர்வு நேரம்",
+  }
+};
