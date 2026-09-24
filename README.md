@@ -15,7 +15,7 @@ CIVICFLOW is an AI-powered civic technology platform designed to streamline muni
 ## 🏗 Architecture
 - **Frontend**: Next.js 14 (App Router), TailwindCSS, React-Leaflet (OpenStreetMap), Lucide Icons.
 - **Backend**: FastAPI, SQLAlchemy, PostgreSQL / SQLite.
-- **AI Triage Layer**: OpenAI API (`gpt-3.5-turbo`) with a deterministic `DemoAIProvider` fallback.
+- **AI Inference Layer**: Powered by the ultra-fast [Groq API](https://groq.com/) for real-time AI Chatbox capabilities and Intelligent Triage.
 
 ## ✨ Features
 1. **Responsive-First Citizen Reporting**: Mobile-optimized camera uploads and HTML5 geolocation.
@@ -97,6 +97,9 @@ npm run dev
 - All AI calls happen server-side; no LLM keys are exposed to the frontend.
 - API endpoints support CORS restrictions and fallback mechanisms.
 - Graceful degradation if the AI provider fails (Deterministic Triage).
+
+## 🏆 Credits
+- **AI Chatbox & Triage**: High-speed, real-time AI inference is proudly powered by [Groq API](https://groq.com/).
 
 ## 📝 License
 MIT License
